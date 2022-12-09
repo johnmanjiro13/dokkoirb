@@ -33,4 +33,4 @@ bot.message(with_text: SELECT_REGEXP) do |event|
   event.respond options.sample
 end
 
-bot.run(background=true)
+bot.run(true)
