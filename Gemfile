@@ -9,3 +9,5 @@ gem "sinatra", "~> 3.0"
 gem "puma", "~> 6.0"
 
 gem "rubocop", "~> 1.40", :group => :development
+
+gem "google-api-client", "~> 0.53.0"

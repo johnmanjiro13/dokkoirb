@@ -2,6 +2,7 @@
 
 require 'discordrb'
 require 'sinatra'
+require 'google/apis/customsearch_v1'
 
 # http server for health checking
 get '/ping' do
@@ -31,6 +32,28 @@ bot.message(with_text: SELECT_REGEXP) do |event|
   options_str = SELECT_REGEXP.match(event.content)[1]
   options = options_str.gsub(/[.!?]/, '').split(/[,\s]/)
   event.respond options.sample
+end
+
+# google api
+svc = Google::Apis::CustomsearchV1::CustomSearchAPIService.new
+svc.key = ENV['CUSTOMSEARCH_API_KEY']
+
+IMAGE_REGEXP = /^dokkoi\s+image\s+(.+)/
+bot.message(with_text: IMAGE_REGEXP) do |event|
+  query = IMAGE_REGEXP.match(event.content)[1]
+  result = svc.list_cses(
+    num: 10,
+    search_type: 'image',
+    cx: ENV['CUSTOMSEARCH_ENGINE_ID'],
+    lr: 'lang_ja',
+    q: query
+  )
+  items = result.items
+  if items.nil? || items.empty?
+    event.respond 'No image'
+  else
+    event.respond items.sample.link
+  end
 end
 
 bot.run(true)
