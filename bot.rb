@@ -13,4 +13,10 @@ bot.message(with_text: 'Ping!') do |event|
   event.respond 'Pong!'
 end
 
+ECHO_REGEXP = /^dokkoi\s+echo\s+(.+)/
+bot.message(with_text: ECHO_REGEXP) do |event|
+  content = ECHO_REGEXP.match(event.content)[1]
+  event.respond content
+end
+
 bot.run(:background)
