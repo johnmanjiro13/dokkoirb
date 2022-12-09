@@ -17,6 +17,7 @@ bot.message(with_text: /^dokkoi\s+help/) do |event|
 dokkoi help - Displays all of the help commands that this bot knows about.
 dokkoi echo <text> - Reply back with <text>.
 dokkoi select <element1>,<element2>,... - Choose one of the elements in your list randomly.
+dokkoi image <query> - Queries Google Images for <query> and returns a top result.
 ```'
   event.respond content
 end
