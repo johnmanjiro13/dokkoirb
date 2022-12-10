@@ -11,6 +11,9 @@
   "labels": [
     "dependencies"
   ],
+  "ruby-version": {
+    "enabled": false
+  },
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
