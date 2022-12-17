@@ -9,7 +9,7 @@ class TestImage < Minitest::Test
   def setup
     ENV['CUSTOMSEARCH_API_KEY'] = 'dummy'
     ENV['CUSTOMSEARCH_ENGINE_ID'] = 'dummy'
-    @cmd = Actions::Image
+    @container = Actions::Image
   end
 
   def test_image
@@ -18,6 +18,6 @@ class TestImage < Minitest::Test
     result = query_result.new([item.new('https://example.com')])
     Google::Apis::CustomsearchV1::CustomSearchAPIService.any_instance.stubs(:list_cses).returns(result)
 
-    assert_equal 'https://example.com', @cmd.query_image('test')
+    assert_equal 'https://example.com', @container.query_image('test')
   end
 end
