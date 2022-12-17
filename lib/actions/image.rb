@@ -10,22 +10,21 @@ module Actions
     IMAGE_REGEXP = /^dokkoi\s+image\s+(.+)/
     message(with_text: IMAGE_REGEXP) do |event|
       query = IMAGE_REGEXP.match(event.content)[1]
-      result = google_api_service.list_cses(
-        num: 10,
-        search_type: 'image',
-        cx: ENV.fetch('CUSTOMSEARCH_ENGINE_ID'),
-        lr: 'lang_ja',
-        q: query
-      )
-      items = result.items
-      if items.nil? || items.empty?
-        event.respond 'No image'
-      else
-        event.respond items.sample.link
-      end
+      event.respond query_image(query)
     end
 
     module_function
+
+    def query_image(query)
+      result = google_api_service.list_cses(num: 10, search_type: 'image', cx: ENV.fetch('CUSTOMSEARCH_ENGINE_ID'),
+                                            lr: 'lang_ja', q: query)
+      return 'Failed to query image' if result.nil?
+
+      items = result.items
+      return 'No image' if items.nil? || items.empty?
+
+      items.sample.link
+    end
 
     def google_api_service
       @google_api_service ||= begin

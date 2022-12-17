@@ -8,9 +8,15 @@ module Actions
 
     SELECT_REGEXP = /^dokkoi\s+select\s+(.+)/
     message(with_text: SELECT_REGEXP) do |event|
-      options_str = SELECT_REGEXP.match(event.content)[1]
+      result = select(SELECT_REGEXP.match(event.content)[1])
+      event.respond result
+    end
+
+    module_function
+
+    def select(options_str)
       options = options_str.gsub(/[.!?]/, '').split(/[,\s]/)
-      event.respond options.sample
+      options.sample
     end
   end
 end

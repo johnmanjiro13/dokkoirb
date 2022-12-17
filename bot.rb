@@ -1,10 +1,7 @@
 # frozen_string_literal: true
 
 require 'sinatra'
-require './lib/bot_controller'
-require './lib/actions/echo'
-require './lib/actions/select'
-require './lib/actions/image'
+Dir['./lib/**/*.rb'].each { |file| require file }
 
 # http server for health checking
 get '/ping' do
