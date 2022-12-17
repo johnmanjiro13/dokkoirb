@@ -7,6 +7,8 @@ require 'actions/image'
 
 class TestImage < Minitest::Test
   def setup
+    ENV['CUSTOMSEARCH_API_KEY'] = 'dummy'
+    ENV['CUSTOMSEARCH_ENGINE_ID'] = 'dummy'
     @cmd = Actions::Image
   end
 
