@@ -7,36 +7,40 @@ module Actions
   module Karma
     extend Discordrb::EventContainer
 
-    @last_name = ''
     KARMA_REGEXP = /^([\s\w'@.\-:\u3040-\u30FF\uFF60\u4E00-\u9FA0]*)(\+\+|--)$/
     message(with_text: KARMA_REGEXP) do |event|
-      name = KARMA_REGEXP.match(event.content)[1]
-      action = KARMA_REGEXP.match(event.content)[2]
+      matched = KARMA_REGEXP.match(event.content)
+      name = matched[1]
+      action = matched[2]
       event.respond response(name, action)
     end
 
     module_function
 
     def response(name, action)
-      return 'The last user is not yet registered' if name == '' && @last_name == ''
+      last_user = find_last_user
+      return 'The last user is not yet registered' if name == '' && last_user.nil?
 
-      target = get_target(name)
+      target = if name == ''
+                 last_user
+               else
+                 firebase.set('karmas/last_user', name)
+                 name
+               end
       karma = get_karma(target, action)
       text(target, karma)
     end
 
-    def get_target(name)
-      return @last_name if name == ''
-
-      @last_name = name
-      name
+    def find_last_user
+      response = firebase.get('karmas/last_user')
+      response.body.nil? ? nil : response.body
     end
 
     def get_karma(target, action)
-      saved_karma = firebase.get("karmas/name/#{target}")
-      karma = saved_karma.body.nil? ? 0 : saved_karma.body.to_i
+      response = firebase.get("karmas/user/#{target}")
+      karma = response.body.nil? ? 0 : response.body.to_i
       karma = action == '++' ? karma + 1 : karma - 1
-      firebase.set("karmas/name/#{target}", karma)
+      firebase.set("karmas/user/#{target}", karma)
       karma
     end
 

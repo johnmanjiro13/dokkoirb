@@ -8,7 +8,7 @@ require 'actions/karma'
 class TestKarma < Minitest::Test
   def setup
     ENV['FIREBASE_RTDB_URI'] = 'https://test.com/'
-    ENV['FIREBASE_PRIVATE_KEY_PATH'] = 'test/fixtures/firebase_private_key.json'
+    ENV['FIREBASE_PRIVATE_KEY_PATH'] = 'test/fixtures/firebase_key.json'
     @container = Actions::Karma
   end
 
@@ -27,23 +27,22 @@ class TestKarma < Minitest::Test
   class MockFirebase
     def initialize
       @db = {}
-      @klass = Struct.new(:body)
+      @path_regexp = %r{^(karmas/user/(.+)|karmas/last_user)$}
     end
 
     def get(path)
-      regexp = %r{^karmas/name/(.+)$}
-      match = regexp.match(path)
-      raise Minitest::Assertion, "path #{path} does not match" if match.length != 2
+      matched = @path_regexp.match(path)
+      raise Minitest::Assertion, "path #{path} does not match" if matched.nil? || matched.length != 3
 
-      @klass.new(@db[match[1]])
+      response = Struct.new(:body)
+      response.new(@db[matched[1]])
     end
 
     def set(path, value)
-      regexp = %r{^karmas/name/(.+)$}
-      match = regexp.match(path)
-      raise Minitest::Assertion, "path #{path} does not match" if match.length != 2
+      matched = @path_regexp.match(path)
+      raise Minitest::Assertion, "path #{path} does not match" if matched.nil? || matched.length != 3
 
-      @db[match[1]] = value
+      @db[matched[1]] = value
     end
   end
 end
