@@ -14,5 +14,5 @@ group :development do
   gem 'mocha', '~> 2.0'
   gem 'rake', '~> 13.0'
   gem 'rubocop', '~> 1.40'
-  gem 'rubocop-rake', '~> 0.6.0'
+  gem 'rubocop-rake', '~> 0.7.0'
 end
