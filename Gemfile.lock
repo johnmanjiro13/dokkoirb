@@ -81,7 +81,7 @@ GEM
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     netrc (0.11.0)
-    nio4r (2.5.8)
+    nio4r (2.7.5)
     opus-ruby (1.0.1)
       ffi
     os (1.1.4)
@@ -90,7 +90,7 @@ GEM
       ast (~> 2.4.1)
       racc
     public_suffix (5.0.1)
-    puma (6.0.0)
+    puma (7.2.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.4)
@@ -163,7 +163,7 @@ DEPENDENCIES
   firebase (~> 0.2.8)
   google-api-client (~> 0.53.0)
   mocha (~> 2.0)
-  puma (~> 6.0)
+  puma (~> 7.0)
   rake (~> 13.0)
   rubocop (~> 1.40)
   rubocop-rake (~> 0.7.0)
